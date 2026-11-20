@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Operación Horizonte — Expediente 24-D</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090f;
+      --surface: rgba(18, 28, 48, 0.84);
+      --surface-elevated: rgba(22, 30, 46, 0.9);
+      --border: rgba(148, 163, 184, 0.16);
+      --border-active: rgba(56, 189, 248, 0.45);
+      --accent: #38bdf8;
+      --gold: #f59e0b;
+      --emerald: #10b981;
+      --violet: #a855f7;
+      --red: #f43f5e;
+      --text: #f1f5f9;
+      --text-soft: #94a3b8;
+      --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #091222;
+      background-image:
+        linear-gradient(rgba(56, 189, 248, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.045) 1px, transparent 1px),
+        radial-gradient(950px 550px at 18% -8%, rgba(56, 189, 248, 0.22), transparent 60%),
+        radial-gradient(800px 500px at 88% 8%, rgba(99, 102, 241, 0.16), transparent 58%),
+        linear-gradient(180deg, #0e1a30 0%, #080f1d 55%, #050912 100%);
+      background-size: 36px 36px, 36px 36px, 100% 100%, 100% 100%, 100% 100%;
+      padding: 20px 16px 60px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    /* Subtle top telemetry */
+    .telemetry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: #64748b;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pulse-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+    /* Luxury Header */
+    header {
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 22px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .brand-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+    }
+    .subtitle {
+      margin: 4px 0 0;
+      font-size: 13.5px;
+      color: var(--text-soft);
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      padding: 8px 13px;
+      border-radius: 10px;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: #e2e8f0;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-ghost:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255,255,255,0.18); }
+
+    /* Optional Test Bar (injected only in index_pruebas.html) */
+    .test-toolbar {
+      display: none;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .test-toolbar-title {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: #fbbf24;
+    }
+    .test-toolbar-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+    .btn-test {
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fef3c7;
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-test:hover { background: rgba(245, 158, 11, 0.3); }
+
+    /* Main 2-column responsive layout */
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+    @media (min-width: 860px) {
+      .workspace { grid-template-columns: 310px 1fr; }
+      .workspace.no-sidebar { grid-template-columns: 1fr; max-width: 720px; margin: 0 auto; }
+    }
+    .workspace.no-sidebar .mission-list { display: none; }
+
+    .mission-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (min-width: 860px) {
+      .mission-list { grid-template-columns: 1fr; }
+    }
+
+    .mission-card {
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 15px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text);
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+    }
+    .mission-card:hover { border-color: rgba(255,255,255,0.18); transform: translateY(-1px); }
+    .mission-card.active {
+      background: linear-gradient(145deg, rgba(22, 34, 56, 0.95), rgba(14, 21, 35, 0.95));
+      border-color: var(--border-active);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(56, 189, 248, 0.15);
+    }
+    .mission-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+    }
+    .mission-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .mission-status {
+      font-size: 12px;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .mission-card.done .mission-status { color: var(--emerald); font-weight: 600; }
+
+    /* Stage Card */
+    .stage {
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 26px 26px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      min-width: 0;
+    }
+    @media (max-width: 520px) {
+      .stage { padding: 20px 16px; border-radius: 16px; }
+    }
+
+    .stage-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-soft);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .stage-meta span:first-child { color: var(--accent); font-weight: 700; }
+
+    .stage h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+      color: #ffffff;
+    }
+    .stage p {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin: 0 0 18px;
+    }
+    code {
+      font-family: var(--mono);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      color: #7dd3fc;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    /* Controls */
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      width: 100%;
+    }
+    @media (max-width: 440px) {
+      .input-row { flex-direction: column; }
+    }
+
+    input[type="text"], input[type="number"] {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      background: rgba(6, 9, 16, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      padding: 13px 15px;
+      border-radius: 12px;
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #0ea5e9, #2563eb);
+      color: #ffffff;
+      border: none;
+      padding: 13px 20px;
+      border-radius: 12px;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s, filter 0.15s;
+      white-space: nowrap;
+      box-shadow: 0 6px 20px rgba(14, 165, 233, 0.25);
+    }
+    .btn:hover { filter: brightness(1.08); }
+    .btn:active { transform: scale(0.98); }
+    .btn-uv { background: linear-gradient(135deg, #7c3aed, #a855f7); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.28); }
+    .btn-green { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.28); }
+    .btn-gold { background: linear-gradient(135deg, #d97706, #f59e0b); color: #090d16; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.28); }
+
+    .alert {
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      margin-top: 14px;
+      display: none;
+    }
+    .alert.show { display: block; animation: fadeIn 0.25s ease; }
+    .alert-err { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.35); color: #fda4af; }
+    .alert-warn { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.35); color: #fde68a; }
+    .alert-ok { background: rgba(16, 185, 129, 0.11); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; }
+
+    .hidden { display: none !important; }
+
+    /* Canvas Wrappers */
+    .canvas-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #03050a;
+      touch-action: none;
+      margin: 12px 0 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+    canvas { display: block; width: 100%; height: auto; cursor: crosshair; }
+
+    .hint-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--text-soft);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    /* Day 3 Rotors */
+    .dial-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 14px 0; }
+    .dial {
+      background: rgba(8, 12, 22, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+      min-width: 0;
+    }
+    .dial-label { font-family: var(--mono); font-size: 10.5px; color: var(--text-soft); letter-spacing: 0.1em; }
+    .dial-val { font-family: var(--mono); font-size: 30px; font-weight: 800; color: #fff; margin: 8px 0; }
+    .dial-btns { display: flex; gap: 6px; }
+    .dial-btns button {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: #f8fafc;
+      padding: 9px 4px;
+      border-radius: 8px;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .dial-btns button:hover { background: rgba(255, 255, 255, 0.12); }
+
+    /* Day 10 Keypad */
+    .keypad { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 9px; margin: 14px 0; }
+    .key-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      padding: 14px 0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      min-width: 0;
+    }
+    .key-btn:hover { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.4); }
+    .key-btn:active { transform: scale(0.95); }
+
+    /* Day 18 SVG PCB Board */
+    .pcb-wrap {
+      position: relative;
+      background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08), rgba(6, 10, 16, 0.95));
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 16px;
+      padding: 20px 16px;
+      margin: 14px 0;
+    }
+    .pcb-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .nodes-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .node-btn {
+      background: rgba(10, 18, 28, 0.95);
+      border: 1.5px solid rgba(255, 255, 255, 0.14);
+      border-radius: 12px;
+      padding: 16px 10px;
+      color: #cbd5e1;
+      font-family: var(--mono);
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .node-btn.lit {
+      border-color: var(--emerald);
+      background: rgba(16, 185, 129, 0.18);
+      color: #fff;
+      box-shadow: 0 0 22px rgba(16, 185, 129, 0.35);
+    }
+
+    /* Day 23 slots */
+    .coche-slots {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      margin: 16px 0;
+      width: 100%;
+    }
+    .coche-slots input {
+      min-width: 0;
+      width: 100%;
+      text-align: center;
+      padding: 14px 2px;
+      font-size: clamp(18px, 4.5vw, 24px);
+      letter-spacing: 0;
+    }
+
+    /* Empty Standby */
+    .empty-state { text-align: center; padding: 40px 16px; }
+    .radar-ring {
+      width: 96px; height: 96px; margin: 0 auto 18px; border-radius: 50%;
+      border: 1.5px solid rgba(56, 189, 248, 0.35); position: relative;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+    }
+    .radar-ring::before { content: ""; position: absolute; inset: 10px; border-radius: 50%; border: 1px dashed rgba(56, 189, 248, 0.3); }
+    .radar-sweep { position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 0deg, rgba(56, 189, 248, 0.5) 0deg, transparent 70deg); animation: spin 3s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer-note { margin-top: 28px; text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: #475569; }
+    .shake { animation: shake 0.35s ease; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="telemetry">
+      <span class="status-pill"><span class="pulse-dot"></span>ENLACE CIFRADO // SAT-24D</span>
+      <span id="clockTelemetry">--:--:--</span>
+    </div>
+
+    <header>
+      <div>
+        <div class="brand-eyebrow" id="dateBadge">EXPEDIENTE 24-D</div>
+        <h1>Operación Horizonte</h1>
+        <p class="subtitle">Terminal táctica de descifrado y misiones encriptadas</p>
+      </div>
+      <div class="header-actions">
+        <div class="stat-chip" id="progressText">0 / 0 señales</div>
+        <button class="btn-ghost" id="soundToggle">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          <span>Audio: ON</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Solo visible en index_pruebas.html -->
+    <div class="test-toolbar" id="testToolbar">
+      <span class="test-toolbar-title">MODO PRUEBAS // TODOS LOS DÍAS DESBLOQUEADOS</span>
+      <div class="test-toolbar-btns">
+        <button class="btn-test" onclick="autoCompleteCurrent()">⚡ Autocompletar día actual</button>
+        <button class="btn-test" onclick="autoCompleteAll()">✓ Completar todos</button>
+        <button class="btn-test" onclick="resetProgress()">↺ Reiniciar todo</button>
+      </div>
+    </div>
+
+    <div class="workspace">
+      <aside class="mission-list" id="missionGrid">
+        <button class="mission-card hidden" data-day="3">
+          <div class="mission-card-top"><span>DÍA 03</span><span>CRIPTO</span></div>
+          <div class="mission-title">Detector de Señuelos</div>
+          <div class="mission-status" id="st-3">Pendiente</div>
+        </button>
+        <button class="mission-card hidden" data-day="8">
+          <div class="mission-card-top"><span>DÍA 08</span><span>FORENSE</span></div>
+          <div class="mission-title">Escáner UV Virtual</div>
+          <div class="mission-status" id="st-8">Pendiente</div>
+        </button>
+        <button class="mission-card hidden" data-day="10">
+          <div class="mission-card-top"><span>DÍA 10</span><span>RADIO</span></div>
+          <div class="mission-title">Audio Encriptado</div>
+          <div class="mission-status" id="st-10">Pendiente</div>
+        </button>
+        <button class="mission-card hidden" data-day="15">
+          <div class="mission-card-top"><span>DÍA 15</span><span>ÓPTICO</span></div>
+          <div class="mission-title">Visor del Taller</div>
+          <div class="mission-status" id="st-15">Pendiente</div>
+        </button>
+        <button class="mission-card hidden" data-day="18">
+          <div class="mission-card-top"><span>DÍA 18</span><span>NÚCLEO</span></div>
+          <div class="mission-title">Placa Clave Maestra</div>
+          <div class="mission-status" id="st-18">Pendiente</div>
+        </button>
+        <button class="mission-card hidden" data-day="23">
+          <div class="mission-card-top"><span>DÍA 23</span><span>SATÉLITE</span></div>
+          <div class="mission-title">Coordenada Final</div>
+          <div class="mission-status" id="st-23">Pendiente</div>
+        </button>
+      </aside>
+
+      <main class="stage" id="stageArea">
+        <section id="panel-empty" class="empty-state hidden">
+          <div class="radar-ring"><div class="radar-sweep"></div></div>
+          <h2 id="emptyTitle">Enlace en espera</h2>
+          <p id="emptyDesc">No hay transmisiones activas en esta fecha.</p>
+        </section>
+
+        <!-- DÍA 3 -->
+        <section id="panel-3" class="hidden">
+          <div class="stage-meta"><span>MÓDULO 03 // CRIPTO-ANÁLISIS</span><span>NIVEL 1</span></div>
+          <h2>Detector de Señuelos</h2>
+          <p>Descifra <code>Z M E N I</code> con tu <strong>Rueda César física</strong> (<code>A = E</code>) e introduce la palabra obtenida:</p>
+          <div class="input-row">
+            <input type="text" id="in-3" placeholder="PALABRA..." maxlength="10" />
+            <button class="btn" onclick="checkDay3()">Analizar</button>
+          </div>
+          <div class="alert alert-err" id="err-3">Lectura incorrecta. Alinea la A exterior con la E interior para Z - M - E - N - I.</div>
+
+          <div id="minigame-3" class="hidden">
+            <div class="alert alert-warn show">
+              <strong>Señuelo detectado:</strong> «VIAJE» es una pista falsa. Sincroniza los 3 rotores con la clave del expediente (<strong>2 - 4 - D</strong>) para limpiar la señal.
+            </div>
+            <div class="canvas-wrap"><canvas id="oscCanvas" width="600" height="125"></canvas></div>
+            <div class="dial-grid">
+              <div class="dial">
+                <div class="dial-label">ROTOR 1</div>
+                <div class="dial-val" id="d3-0">0</div>
+                <div class="dial-btns"><button onclick="spinDial(0,-1)">−</button><button onclick="spinDial(0,1)">+</button></div>
+              </div>
+              <div class="dial">
+                <div class="dial-label">ROTOR 2</div>
+                <div class="dial-val" id="d3-1">0</div>
+                <div class="dial-btns"><button onclick="spinDial(1,-1)">−</button><button onclick="spinDial(1,1)">+</button></div>
+              </div>
+              <div class="dial">
+                <div class="dial-label">ROTOR 3</div>
+                <div class="dial-val" id="d3-2">A</div>
+                <div class="dial-btns"><button onclick="spinDial(2,-1)">−</button><button onclick="spinDial(2,1)">+</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-ok" id="ok-3">
+            <strong>Señuelo neutralizado — Pista real del Día 3:</strong><br/>
+            «¡Buen intento! No es un viaje. Ignora esa palabra y quédate con <strong>la letra que va justo antes de la N</strong> en el abecedario.»<br/><br/>
+            Anota esa letra (<strong>M</strong>) en la casilla del Día 3 de tu Hoja de Ruta.
+          </div>
+        </section>
+
+        <!-- DÍA 8 -->
+        <section id="panel-8" class="hidden">
+          <div class="stage-meta"><span>MÓDULO 08 // INSPECCIÓN UV 395nm</span><span>NIVEL 2</span></div>
+          <h2>Escáner UV Virtual</h2>
+          <p>Introduce la <strong>Palabra Clave de la Semana 1</strong> (Hoja de Ruta) para desbloquear el dossier clasificado:</p>
+          <div class="input-row">
+            <input type="text" id="in-8" placeholder="CLAVE SEMANA 1..." maxlength="10" />
+            <button class="btn btn-uv" onclick="unlockDay8()">Activar UV</button>
+          </div>
+          <div class="alert alert-err" id="err-8">Acceso denegado. Revisa las 5 letras ordenadas del Día 6.</div>
+
+          <div id="minigame-8" class="hidden">
+            <div class="hint-bar">Desliza el dedo sobre el documento para proyectar la luz ultravioleta y revelar la tinta invisible</div>
+            <div class="canvas-wrap"><canvas id="uvCanvas" width="640" height="400"></canvas></div>
+            <div class="input-row">
+              <input type="number" id="in-8-num" placeholder="CIFRAS POSICIÓN 1 (3 DÍGITOS)..." />
+              <button class="btn btn-green" onclick="verifyDay8Num()">Confirmar</button>
+            </div>
+            <div class="alert alert-err" id="err-8-num">Pasa la luz UV por el centro del dossier para leer la cifra oculta.</div>
+          </div>
+
+          <div class="alert alert-ok" id="ok-8">
+            <strong>Posición 1 desbloqueada:</strong><br/>
+            Primer bloque confirmado: <strong>333</strong>. Anótalo en la <strong>Posición 1</strong> de tu Hoja de Ruta (Semana 2).
+          </div>
+        </section>
+
+        <!-- DÍA 10 -->
+        <section id="panel-10" class="hidden">
+          <div class="stage-meta"><span>MÓDULO 10 // FRECUENCIA 142.8 MHz</span><span>INTERCEPTADO</span></div>
+          <h2>Estación de Audio Encriptado</h2>
+          <p>Escucha la transmisión de voz interceptada y marca en el teclado el resultado para la <strong>Posición 3</strong> de la caja fuerte.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+            <button class="btn" id="playAudioBtn" onclick="playDay10Audio()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Reproducir transmisión</span>
+            </button>
+            <button class="btn-ghost" onclick="toggleTranscript()">Ver transcripción</button>
+          </div>
+          <div class="canvas-wrap"><canvas id="specCanvas" width="600" height="90"></canvas></div>
+          <div class="alert alert-warn" id="transcript10">
+            «Atención agente, escucha con cuidado: un tren eléctrico de alta velocidad viaja hacia el norte a 120 kilómetros por hora, mientras el viento del oeste sopla a 50 kilómetros por hora. Multiplica el número de chimeneas del tren por 4 y súmale el número de patas que tiene una araña. Ese resultado va en la tercera posición.»
+          </div>
+          <div class="keypad" id="keypad10"></div>
+          <div class="alert alert-err" id="err-10">Código erróneo. Piensa bien: ¿cuántas chimeneas tiene un tren <em>eléctrico</em>?</div>
+          <div class="alert alert-ok" id="ok-10">
+            <strong>Posición 3 desbloqueada:</strong><br/>
+            0 chimeneas × 4 + 8 patas = <strong>8</strong>. Anota el <strong>8</strong> en la <strong>Posición 3</strong> de tu Hoja de Ruta.
+          </div>
+        </section>
+
+        <!-- DÍA 15 -->
+        <section id="panel-15" class="hidden">
+          <div class="stage-meta"><span>MÓDULO 15 // VISOR NOCTURNO</span><span>EXPLORACIÓN</span></div>
+          <h2>Visor del Taller Secreto</h2>
+          <div class="hint-bar">La habitación está a oscuras: arrastra la lupa táctica para iluminar la escena y encontrar la pizarra</div>
+          <div class="canvas-wrap"><canvas id="magCanvas" width="640" height="360"></canvas></div>
+          <div class="input-row">
+            <input type="text" id="in-15" placeholder="¿DÓNDE ESTÁ LA PIEZA 1/3?" />
+            <button class="btn btn-green" onclick="checkDay15()">Validar</button>
+          </div>
+          <div class="alert alert-err" id="err-15">Sigue moviendo la lupa por las paredes del taller hasta leer el mensaje de la pizarra.</div>
+          <div class="alert alert-ok" id="ok-15">
+            <strong>Sector localizado:</strong><br/>
+            «DONDE SE GUARDA EL HIELO» → Busca en la <strong>nevera / congelador</strong> para recuperar la <strong>Pieza 1/3</strong> del puzle.
+          </div>
+        </section>
+
+        <!-- DÍA 18 -->
+        <section id="panel-18" class="hidden">
+          <div class="stage-meta"><span>MÓDULO 18 // NÚCLEO DE SEGURIDAD</span><span>FASE FINAL</span></div>
+          <h2>Placa de Clave Maestra</h2>
+          <p>Une físicamente las 3 piezas recuperadas esta semana e introduce la rotación César impresa en el puzle (ej. <code>A=K</code>):</p>
+          <div class="input-row">
+            <input type="text" id="in-18" placeholder="EJ: A=K" maxlength="5" />
+            <button class="btn" onclick="unlockDay18()">Enlazar</button>
+          </div>
+          <div class="alert alert-err" id="err-18">Revisa la línea superior de tu tarjeta montada (A = ?).</div>
+
+          <div id="minigame-18" class="hidden">
+            <div class="hint-bar">Activa los relés en secuencia ascendente (<strong>RELÉ 01 → 02 → 03 → 04</strong>)</div>
+            <div class="pcb-wrap">
+              <svg class="pcb-svg" viewBox="0 0 400 160" preserveAspectRatio="none">
+                <path id="trace1" d="M 300 45 L 100 45" stroke="rgba(255,255,255,0.1)" stroke-width="3" fill="none"/>
+                <path id="trace2" d="M 100 45 L 300 115" stroke="rgba(255,255,255,0.1)" stroke-width="3" fill="none"/>
+                <path id="trace3" d="M 300 115 L 100 115" stroke="rgba(255,255,255,0.1)" stroke-width="3" fill="none"/>
+              </svg>
+              <div class="nodes-grid" id="nodesGrid"></div>
+            </div>
+          </div>
+
+          <div class="alert alert-ok" id="ok-18">
+            <strong>Clave Maestra validada (A = K + Tabla Binaria):</strong><br/>
+            <em>Aviso clasificado para mañana:</em> «Prepara tu <strong>Rueda César física del Día 1</strong>. La necesitarás en la Semana 4.»
+          </div>
+        </section>
+
+        <!-- DÍA 23 -->
+        <section id="panel-23" class="hidden">
+          <div class="stage-meta"><span>MÓDULO 23 // FIJACIÓN SATELITAL</span><span>CIERRE</span></div>
+          <h2>Coordenada del Escondite Final</h2>
+          <p>Toma la inicial de <strong>ESTILO</strong> (Día 14) y cámbiala por la letra de la Casilla 1. Introduce las 5 letras de tu Hoja de Ruta:</p>
+          <div class="canvas-wrap"><canvas id="radarCanvas" width="600" height="160"></canvas></div>
+          <div class="coche-slots">
+            <input type="text" maxlength="1" id="c0" placeholder="1" />
+            <input type="text" maxlength="1" id="c1" placeholder="2" />
+            <input type="text" maxlength="1" id="c2" placeholder="3" />
+            <input type="text" maxlength="1" id="c3" placeholder="4" />
+            <input type="text" maxlength="1" id="c4" placeholder="5" />
+          </div>
+          <button class="btn btn-gold" style="width:100%" onclick="checkDay23()">Fijar Coordenada</button>
+          <div class="alert alert-err" id="err-23">Coordenada inválida. Revisa las 5 casillas de la Semana 4.</div>
+          <div class="alert alert-ok" id="ok-23">
+            <strong>Objetivo fijado: C - O - C - H - E</strong><br/>
+            Ya conoces <strong>DÓNDE</strong> está escondido, agente... pero aún no sabes <strong>QUÉ</strong> hay dentro.<br/><br/>
+            Mañana abre el <strong>Sobre 24</strong> para descubrir tu regalo final.
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="footer-note">CONEXIÓN CIFRADA AES-256 // AGENCIA HORIZONTE</div>
+  </div>
+
+  <script>
+    const IS_TEST_MODE = false;
+
+    function updateClock() {
+      const d = new Date();
+      document.getElementById("clockTelemetry").textContent = d.toTimeString().slice(0, 8);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- Clean Spy Tension Music & FX ---
+    let soundOn = true;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let ctx = null, musicMaster = null, musicStarted = false, musicTimer = null, stepIdx = 0;
+
+    function ensureAudioCtx() {
+      if (!ctx) ctx = new AudioCtx();
+      if (ctx.state === "suspended") ctx.resume();
+    }
+
+    function startTensionMusic() {
+      if (!soundOn || musicStarted) return;
+      try {
+        ensureAudioCtx();
+        musicMaster = ctx.createGain();
+        musicMaster.gain.value = 0.45;
+        musicMaster.connect(ctx.destination);
+        musicStarted = true;
+
+        const melody = [220, 0, 329.63, 0, 246.94, 0, 349.23, 329.63, 220, 0, 261.63, 0, 196, 0, 207.65, 0];
+        const bass =   [110, 0, 0,      0, 110,    0, 0,      0,      87.31, 0, 0,    0, 98,  0, 82.41,  0];
+
+        musicTimer = setInterval(() => {
+          if (!soundOn || !ctx || ctx.state !== "running") return;
+          const now = ctx.currentTime;
+          const idx = stepIdx % melody.length;
+
+          const tick = ctx.createOscillator();
+          const tickG = ctx.createGain();
+          tick.type = "sine";
+          tick.frequency.setValueAtTime(idx % 4 === 0 ? 1400 : 1050, now);
+          tickG.gain.setValueAtTime(0.012, now);
+          tickG.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+          tick.connect(tickG); tickG.connect(musicMaster);
+          tick.start(now); tick.stop(now + 0.04);
+
+          if (bass[idx] > 0) {
+            const bOsc = ctx.createOscillator();
+            const bG = ctx.createGain();
+            bOsc.type = "sine";
+            bOsc.frequency.setValueAtTime(bass[idx], now);
+            bOsc.frequency.exponentialRampToValueAtTime(bass[idx] * 0.85, now + 0.9);
+            bG.gain.setValueAtTime(0.001, now);
+            bG.gain.linearRampToValueAtTime(0.1, now + 0.04);
+            bG.gain.exponentialRampToValueAtTime(0.0001, now + 1.1);
+            bOsc.connect(bG); bG.connect(musicMaster);
+            bOsc.start(now); bOsc.stop(now + 1.15);
+          }
+
+          if (melody[idx] > 0) {
+            const mOsc = ctx.createOscillator();
+            const mG = ctx.createGain();
+            mOsc.type = "sine";
+            mOsc.frequency.setValueAtTime(melody[idx], now);
+            mG.gain.setValueAtTime(0.001, now);
+            mG.gain.linearRampToValueAtTime(0.04, now + 0.03);
+            mG.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+            mOsc.connect(mG); mG.connect(musicMaster);
+            mOsc.start(now); mOsc.stop(now + 0.9);
+          }
+          stepIdx++;
+        }, 480);
+      } catch(e) {}
+    }
+
+    function duckMusic(duck) {
+      if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(duck ? 0.06 : 0.45, ctx.currentTime, 0.2);
+    }
+
+    ["pointerdown", "keydown"].forEach(ev => {
+      window.addEventListener(ev, () => { if (soundOn) startTensionMusic(); }, { once: true });
+    });
+
+    function beep(freq = 540, dur = 0.07, type = "sine") {
+      if (navigator.vibrate) navigator.vibrate(15);
+      if (!soundOn) return;
+      try {
+        ensureAudioCtx();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = type; o.frequency.value = freq;
+        g.gain.setValueAtTime(0.07, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(); o.stop(ctx.currentTime + dur);
+      } catch(e) {}
+    }
+
+    document.getElementById("soundToggle").onclick = () => {
+      soundOn = !soundOn;
+      document.querySelector("#soundToggle span").textContent = soundOn ? "Audio: ON" : "Audio: OFF";
+      if (soundOn) {
+        startTensionMusic();
+        if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(0.45, ctx.currentTime, 0.1);
+      } else {
+        if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
+      }
+    };
+
+    // --- Date & Visibility ---
+    const missionDays = [3, 8, 10, 15, 18, 23];
+    let done = JSON.parse(localStorage.getItem("horizonte_done") || "{}");
+    let activeDay = 3;
+
+    if (IS_TEST_MODE) {
+      document.getElementById("testToolbar").style.display = "flex";
+    }
+
+    function getCurrentDay() {
+      if (IS_TEST_MODE) return 24;
+      const now = new Date();
+      const y = now.getFullYear(), m = now.getMonth();
+      if (y < 2026 || (y === 2026 && m < 11)) return 0;
+      if (m === 11) return now.getDate();
+      return 24;
+    }
+
+    function selectDay(day) {
+      activeDay = day;
+      document.querySelectorAll(".mission-card").forEach(b => b.classList.toggle("active", Number(b.dataset.day) === day));
+      missionDays.forEach(d => document.getElementById(`panel-${d}`).classList.toggle("hidden", d !== day));
+      document.getElementById("panel-empty").classList.add("hidden");
+    }
+
+    function renderForDate() {
+      const cur = getCurrentDay();
+      document.getElementById("dateBadge").textContent =
+        IS_TEST_MODE ? "MODO PRUEBAS // EXPEDIENTE 24-D"
+        : (cur === 0 ? "EXPEDIENTE 24-D // STANDBY" : `EXPEDIENTE 24-D // ${cur} DIC`);
+
+      const unlocked = missionDays.filter(d => d <= cur);
+      let completedCount = 0;
+
+      missionDays.forEach(d => {
+        const card = document.querySelector(`.mission-card[data-day="${d}"]`);
+        const st = document.getElementById(`st-${d}`);
+        const visible = d <= cur;
+        card.classList.toggle("hidden", !visible);
+        if (visible) {
+          if (done[d]) {
+            completedCount++;
+            card.classList.add("done");
+            st.textContent = "✓ Completado";
+          } else {
+            card.classList.remove("done");
+            st.textContent = (d === cur) ? "● Activo hoy" : "Pendiente";
+          }
+        }
+      });
+
+      document.getElementById("progressText").textContent = `${completedCount} / ${unlocked.length} señales`;
+
+      document.querySelector(".workspace").classList.toggle("no-sidebar", unlocked.length === 0);
+
+      if (unlocked.length === 0) {
+        missionDays.forEach(d => document.getElementById(`panel-${d}`).classList.add("hidden"));
+        document.getElementById("panel-empty").classList.remove("hidden");
+        document.getElementById("emptyTitle").textContent =
+          cur === 0 ? "Enlace satelital en espera" : "Sin transmisiones activas hoy";
+        document.getElementById("emptyDesc").textContent =
+          cur === 0
+            ? "Operación Horizonte se activará automáticamente el 1 de diciembre."
+            : "Hoy no hay señal encriptada en esta terminal. Revisa tu sobre físico del calendario.";
+      } else {
+        const target = IS_TEST_MODE ? activeDay : (unlocked.includes(cur) ? cur : unlocked[unlocked.length - 1]);
+        selectDay(target);
+      }
+    }
+
+    function markDone(day) {
+      done[day] = true;
+      localStorage.setItem("horizonte_done", JSON.stringify(done));
+      beep(660, 0.1); setTimeout(() => beep(880, 0.16), 100);
+      if (navigator.vibrate) navigator.vibrate([40, 30, 80]);
+      renderForDate();
+      selectDay(day);
+    }
+
+    document.querySelectorAll(".mission-card").forEach(btn => {
+      btn.onclick = () => { beep(480, 0.04); selectDay(Number(btn.dataset.day)); };
+    });
+
+    // Test Mode Helpers
+    function completeVisualState(day) {
+      if (day === 3) {
+        document.getElementById("in-3").value = "VIAJE";
+        document.getElementById("minigame-3").classList.remove("hidden");
+        dialVals[0] = 2; dialVals[1] = 4; dialVals[2] = 3;
+        document.getElementById("d3-0").textContent = "2";
+        document.getElementById("d3-1").textContent = "4";
+        document.getElementById("d3-2").textContent = "D";
+        document.getElementById("ok-3").classList.add("show");
+      } else if (day === 8) {
+        document.getElementById("in-8").value = "RUMBO";
+        document.getElementById("minigame-8").classList.remove("hidden");
+        document.getElementById("in-8-num").value = "333";
+        drawUV(320, 200);
+        document.getElementById("ok-8").classList.add("show");
+      } else if (day === 10) {
+        document.getElementById("ok-10").classList.add("show");
+      } else if (day === 15) {
+        document.getElementById("in-15").value = "Nevera";
+        drawMag(490, 140);
+        document.getElementById("ok-15").classList.add("show");
+      } else if (day === 18) {
+        document.getElementById("in-18").value = "A=K";
+        document.getElementById("minigame-18").classList.remove("hidden");
+        renderNodes();
+        document.querySelectorAll(".node-btn").forEach((b, idx) => {
+          b.classList.add("lit");
+        });
+        ["trace1","trace2","trace3"].forEach(id => document.getElementById(id).setAttribute("stroke", "#10b981"));
+        document.getElementById("ok-18").classList.add("show");
+      } else if (day === 23) {
+        "COCHE".split("").forEach((ch, i) => document.getElementById(`c${i}`).value = ch);
+        targetLocked = true;
+        document.getElementById("ok-23").classList.add("show");
+      }
+      markDone(day);
+    }
+
+    function autoCompleteCurrent() { completeVisualState(activeDay); }
+    function autoCompleteAll() { missionDays.forEach(d => completeVisualState(d)); selectDay(activeDay); }
+    function resetProgress() {
+      done = {};
+      localStorage.removeItem("horizonte_done");
+      location.reload();
+    }
+
+    // --- DÍA 3 ---
+    const dialVals = [0, 0, 0];
+    const dialLetters = ["A", "B", "C", "D", "E", "F"];
+    let oscPhase = 0;
+    const oscCanvas = document.getElementById("oscCanvas");
+    const oscCtx = oscCanvas.getContext("2d");
+
+    function drawOsc() {
+      const w = oscCanvas.width, h = oscCanvas.height;
+      oscCtx.fillStyle = "#04070e"; oscCtx.fillRect(0, 0, w, h);
+      oscCtx.strokeStyle = "rgba(255,255,255,0.04)";
+      for (let x = 0; x < w; x += 30) { oscCtx.beginPath(); oscCtx.moveTo(x,0); oscCtx.lineTo(x,h); oscCtx.stroke(); }
+      oscCtx.beginPath(); oscCtx.moveTo(0, h/2); oscCtx.lineTo(w, h/2); oscCtx.stroke();
+
+      const matchCount = (dialVals[0] === 2 ? 1 : 0) + (dialVals[1] === 4 ? 1 : 0) + (dialLetters[dialVals[2]] === "D" ? 1 : 0);
+      const locked = matchCount === 3;
+      const noise = locked ? 0 : (3 - matchCount) * 8;
+
+      oscCtx.beginPath();
+      oscCtx.strokeStyle = locked ? "#10b981" : "#f59e0b";
+      oscCtx.lineWidth = 2.5;
+      for (let x = 0; x < w; x += 3) {
+        const y = h/2 + Math.sin(x * 0.04 + oscPhase) * (locked ? 30 : 18) + (Math.random() - 0.5) * noise;
+        if (x === 0) oscCtx.moveTo(x, y); else oscCtx.lineTo(x, y);
+      }
+      oscCtx.stroke();
+      oscCtx.fillStyle = locked ? "#34d399" : "#fbbf24";
+      oscCtx.font = "700 12px 'JetBrains Mono', monospace";
+      oscCtx.fillText(locked ? "SEÑAL SINCRONIZADA [2-4-D]" : `INTERFERENCIA: ${(3-matchCount)*33}%`, 16, 22);
+      oscPhase += 0.14;
+      requestAnimationFrame(drawOsc);
+    }
+    drawOsc();
+
+    function checkDay3() {
+      const v = document.getElementById("in-3").value.trim().toUpperCase();
+      document.getElementById("err-3").classList.remove("show");
+      if (v === "VIAJE") {
+        beep(260, 0.14, "sawtooth");
+        document.getElementById("minigame-3").classList.remove("hidden");
+      } else {
+        beep(180, 0.12);
+        document.getElementById("stageArea").classList.add("shake");
+        setTimeout(() => document.getElementById("stageArea").classList.remove("shake"), 350);
+        document.getElementById("err-3").classList.add("show");
+      }
+    }
+
+    function spinDial(idx, dir) {
+      beep(540, 0.04);
+      if (idx < 2) {
+        dialVals[idx] = (dialVals[idx] + dir + 10) % 10;
+        document.getElementById(`d3-${idx}`).textContent = dialVals[idx];
+      } else {
+        dialVals[idx] = (dialVals[idx] + dir + dialLetters.length) % dialLetters.length;
+        document.getElementById(`d3-${idx}`).textContent = dialLetters[dialVals[idx]];
+      }
+      if (dialVals[0] === 2 && dialVals[1] === 4 && dialLetters[dialVals[2]] === "D") {
+        document.getElementById("ok-3").classList.add("show");
+        markDone(3);
+      }
+    }
+
+    // --- DÍA 8: Real Dossier Photo + Fluorescent UV Ink ---
+    const dossierImg = new Image();
+    dossierImg.src = "dossier_dia8.jpg";
+    dossierImg.onload = () => drawUV(120, 120);
+
+    function unlockDay8() {
+      const v = document.getElementById("in-8").value.trim().toUpperCase();
+      document.getElementById("err-8").classList.remove("show");
+      if (v === "RUMBO") {
+        beep(620, 0.1);
+        document.getElementById("minigame-8").classList.remove("hidden");
+        drawUV(120, 120);
+      } else {
+        beep(180, 0.12);
+        document.getElementById("err-8").classList.add("show");
+      }
+    }
+
+    const uvCanvas = document.getElementById("uvCanvas");
+    const uvCtx = uvCanvas.getContext("2d");
+    function drawUV(lx, ly) {
+      const w = uvCanvas.width, h = uvCanvas.height;
+      uvCtx.fillStyle = "#04060c";
+      uvCtx.fillRect(0, 0, w, h);
+
+      // Dim ambient view of the real paper dossier
+      if (dossierImg.complete && dossierImg.naturalWidth > 0) {
+        uvCtx.globalAlpha = 0.28;
+        uvCtx.drawImage(dossierImg, 0, 0, w, h);
+        uvCtx.globalAlpha = 1.0;
+      }
+
+      // UV beam clipped layer
+      uvCtx.save();
+      uvCtx.beginPath();
+      uvCtx.arc(lx, ly, 92, 0, Math.PI * 2);
+      uvCtx.clip();
+
+      if (dossierImg.complete && dossierImg.naturalWidth > 0) {
+        uvCtx.drawImage(dossierImg, 0, 0, w, h);
+      }
+
+      // Violet UV light wash
+      const uvGrad = uvCtx.createRadialGradient(lx, ly, 10, lx, ly, 92);
+      uvGrad.addColorStop(0, "rgba(124, 58, 237, 0.42)");
+      uvGrad.addColorStop(0.65, "rgba(76, 29, 149, 0.55)");
+      uvGrad.addColorStop(1, "rgba(10, 8, 24, 0.78)");
+      uvCtx.fillStyle = uvGrad;
+      uvCtx.fillRect(0, 0, w, h);
+
+      // Glowing UV Ink revealed ONLY under the beam
+      uvCtx.save();
+      uvCtx.strokeStyle = "rgba(56, 189, 248, 0.7)";
+      uvCtx.lineWidth = 2;
+      uvCtx.strokeRect(180, 196, 280, 74);
+
+      uvCtx.fillStyle = "#67e8f9";
+      uvCtx.shadowColor = "#38bdf8";
+      uvCtx.shadowBlur = 16;
+      uvCtx.font = "800 38px 'JetBrains Mono', monospace";
+      uvCtx.fillText("RUMBO = 333", 196, 244);
+
+      uvCtx.shadowColor = "#a855f7";
+      uvCtx.shadowBlur = 10;
+      uvCtx.fillStyle = "#e9d5ff";
+      uvCtx.font = "700 13px 'JetBrains Mono', monospace";
+      uvCtx.fillText("BLOQUE 1 CAJA FUERTE → [ 333 ]", 190, 292);
+      uvCtx.restore();
+      uvCtx.restore();
+
+      // Subtle UV torch rim
+      uvCtx.beginPath();
+      uvCtx.arc(lx, ly, 92, 0, Math.PI * 2);
+      uvCtx.strokeStyle = "rgba(168, 85, 247, 0.55)";
+      uvCtx.lineWidth = 2;
+      uvCtx.stroke();
+    }
+
+    function bindCanvasPointer(canvas, drawFn) {
+      const move = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = (clientX - rect.left) * (canvas.width / rect.width);
+        const y = (clientY - rect.top) * (canvas.height / rect.height);
+        drawFn(x, y);
+      };
+      canvas.addEventListener("mousemove", move);
+      canvas.addEventListener("touchmove", (e) => { e.preventDefault(); move(e); }, { passive: false });
+      canvas.addEventListener("touchstart", move, { passive: true });
+    }
+    bindCanvasPointer(uvCanvas, drawUV);
+
+    function verifyDay8Num() {
+      document.getElementById("err-8-num").classList.remove("show");
+      if (document.getElementById("in-8-num").value.trim() === "333") {
+        document.getElementById("ok-8").classList.add("show");
+        markDone(8);
+      } else {
+        beep(180, 0.12);
+        document.getElementById("err-8-num").classList.add("show");
+      }
+    }
+
+    // --- DÍA 10: Neural MP3 Voice + Keypad ---
+    const specCanvas = document.getElementById("specCanvas");
+    const specCtx = specCanvas.getContext("2d");
+    let audioPlaying = false;
+    function drawSpectrum() {
+      const w = specCanvas.width, h = specCanvas.height;
+      specCtx.fillStyle = "#04070e"; specCtx.fillRect(0, 0, w, h);
+      const bars = 40, bw = (w - 32) / bars;
+      for (let i = 0; i < bars; i++) {
+        const amp = audioPlaying ? (14 + Math.random() * (h - 24)) : (5 + Math.sin(Date.now()*0.003 + i*0.4)*3);
+        specCtx.fillStyle = audioPlaying ? "#38bdf8" : "rgba(56, 189, 248, 0.22)";
+        specCtx.fillRect(16 + i * bw, h - amp - 8, bw - 4, amp);
+      }
+      requestAnimationFrame(drawSpectrum);
+    }
+    drawSpectrum();
+
+    let day10AudioEl = null;
+    function playDay10TTSFallback() {
+      const text = "Atención agente, escucha con cuidado. Un tren eléctrico de alta velocidad viaja hacia el norte a 120 kilómetros por hora, mientras el viento del oeste sopla a 50 kilómetros por hora. Multiplica el número de chimeneas del tren por 4 y súmale el número de patas que tiene una araña. Ese resultado va en la tercera posición.";
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "es-ES"; u.rate = 0.98; u.pitch = 1.0;
+        audioPlaying = true; duckMusic(true);
+        u.onend = () => { audioPlaying = false; duckMusic(false); };
+        u.onerror = () => { audioPlaying = false; duckMusic(false); document.getElementById("transcript10").classList.add("show"); };
+        window.speechSynthesis.speak(u);
+      } else {
+        document.getElementById("transcript10").classList.add("show");
+      }
+    }
+
+    function playDay10Audio() {
+      if (day10AudioEl) { day10AudioEl.pause(); day10AudioEl.currentTime = 0; }
+      day10AudioEl = new Audio("dia10_audio.mp3");
+      audioPlaying = true; duckMusic(true);
+      day10AudioEl.onended = () => { audioPlaying = false; duckMusic(false); };
+      day10AudioEl.onerror = () => { playDay10TTSFallback(); };
+      day10AudioEl.play().catch(() => { playDay10TTSFallback(); });
+    }
+    function toggleTranscript() { document.getElementById("transcript10").classList.toggle("show"); }
+
+    const kp = document.getElementById("keypad10");
+    for (let n = 0; n <= 9; n++) {
+      const b = document.createElement("button");
+      b.className = "key-btn"; b.textContent = n;
+      b.onclick = () => {
+        document.getElementById("err-10").classList.remove("show");
+        if (n === 8) { document.getElementById("ok-10").classList.add("show"); markDone(10); }
+        else { beep(180, 0.14); document.getElementById("err-10").classList.add("show"); }
+      };
+      kp.appendChild(b);
+    }
+
+    // --- DÍA 15: Real Photorealistic Workshop Photo (Pitch Black outside loupe!) ---
+    const magCanvas = document.getElementById("magCanvas");
+    const magCtx = magCanvas.getContext("2d");
+    const workshopImg = new Image();
+    workshopImg.src = "taller_dia15.jpg";
+    workshopImg.onload = () => drawMag(120, 220);
+
+    function drawMag(lx, ly) {
+      const w = magCanvas.width, h = magCanvas.height;
+      // 100% pitch black outside the loupe
+      magCtx.fillStyle = "#03050a";
+      magCtx.fillRect(0, 0, w, h);
+
+      const r = 82, zoom = 1.25;
+      magCtx.save();
+      magCtx.beginPath(); magCtx.arc(lx, ly, r, 0, Math.PI * 2); magCtx.clip();
+
+      if (workshopImg.complete && workshopImg.naturalWidth > 0) {
+        magCtx.drawImage(workshopImg, lx - lx * zoom, ly - ly * zoom, w * zoom, h * zoom);
+      }
+
+      const g = magCtx.createRadialGradient(lx, ly, 18, lx, ly, r);
+      g.addColorStop(0, "rgba(255,255,255,0.06)");
+      g.addColorStop(0.7, "rgba(0,0,0,0)");
+      g.addColorStop(1, "rgba(0,0,0,0.75)");
+      magCtx.fillStyle = g;
+      magCtx.fillRect(0, 0, w, h);
+      magCtx.restore();
+
+      // Realistic loupe rim & glass highlight
+      magCtx.beginPath(); magCtx.arc(lx, ly, r, 0, Math.PI * 2);
+      magCtx.strokeStyle = "rgba(245, 158, 11, 0.75)"; magCtx.lineWidth = 3; magCtx.stroke();
+      magCtx.beginPath(); magCtx.arc(lx, ly, r - 6, -0.9, -0.25);
+      magCtx.strokeStyle = "rgba(255,255,255,0.45)"; magCtx.lineWidth = 2; magCtx.stroke();
+    }
+    drawMag(120, 220);
+    bindCanvasPointer(magCanvas, drawMag);
+
+    function checkDay15() {
+      const v = document.getElementById("in-15").value.trim().toLowerCase();
+      document.getElementById("err-15").classList.remove("show");
+      if (v.includes("nevera") || v.includes("congelador") || v.includes("frigo") || v.includes("hielo")) {
+        document.getElementById("ok-15").classList.add("show"); markDone(15);
+      } else {
+        beep(180, 0.12); document.getElementById("err-15").classList.add("show");
+      }
+    }
+
+    // --- DÍA 18: SVG Trace PCB Board ---
+    let nextNode = 1;
+    function unlockDay18() {
+      const v = document.getElementById("in-18").value.replace(/\s+/g, "").toUpperCase();
+      document.getElementById("err-18").classList.remove("show");
+      if (v === "A=K" || v === "AK") {
+        beep(620, 0.1); document.getElementById("minigame-18").classList.remove("hidden"); renderNodes();
+      } else {
+        beep(180, 0.12); document.getElementById("err-18").classList.add("show");
+      }
+    }
+    function renderNodes() {
+      nextNode = 1;
+      ["trace1","trace2","trace3"].forEach(id => document.getElementById(id).setAttribute("stroke", "rgba(255,255,255,0.1)"));
+      const order = [2, 1, 4, 3];
+      const grid = document.getElementById("nodesGrid");
+      grid.innerHTML = "";
+      order.forEach(n => {
+        const b = document.createElement("button");
+        b.className = "node-btn"; b.textContent = `RELÉ 0${n}`;
+        b.onclick = () => {
+          if (n === nextNode) {
+            beep(480 + n * 95, 0.08);
+            b.classList.add("lit"); b.textContent = `✓ RELÉ 0${n}`;
+            if (nextNode >= 2) document.getElementById(`trace${nextNode - 1}`).setAttribute("stroke", "#10b981");
+            nextNode++;
+            if (nextNode > 4) { document.getElementById("ok-18").classList.add("show"); markDone(18); }
+          } else { beep(180, 0.14); renderNodes(); }
+        };
+        grid.appendChild(b);
+      });
+    }
+
+    // --- DÍA 23: Radar ---
+    const radarCanvas = document.getElementById("radarCanvas");
+    const radarCtx = radarCanvas.getContext("2d");
+    let radarAngle = 0, targetLocked = false;
+    function drawRadar() {
+      const w = radarCanvas.width, h = radarCanvas.height;
+      const cx = w / 2, cy = h / 2, maxR = 64;
+      radarCtx.fillStyle = "#04070e"; radarCtx.fillRect(0, 0, w, h);
+      radarCtx.strokeStyle = targetLocked ? "rgba(16,185,129,0.35)" : "rgba(56,189,248,0.2)";
+      radarCtx.lineWidth = 1;
+      [22, 44, maxR].forEach(r => { radarCtx.beginPath(); radarCtx.arc(cx, cy, r, 0, Math.PI*2); radarCtx.stroke(); });
+      radarCtx.beginPath(); radarCtx.moveTo(cx - maxR, cy); radarCtx.lineTo(cx + maxR, cy); radarCtx.stroke();
+      radarCtx.beginPath(); radarCtx.moveTo(cx, cy - maxR); radarCtx.lineTo(cx, cy + maxR); radarCtx.stroke();
+      radarCtx.beginPath(); radarCtx.moveTo(cx, cy);
+      radarCtx.lineTo(cx + Math.cos(radarAngle) * maxR, cy + Math.sin(radarAngle) * maxR);
+      radarCtx.strokeStyle = targetLocked ? "#10b981" : "#38bdf8"; radarCtx.lineWidth = 2; radarCtx.stroke();
+      radarCtx.fillStyle = targetLocked ? "#34d399" : "#94a3b8"; radarCtx.font = "700 12px 'JetBrains Mono', monospace";
+      radarCtx.fillText(targetLocked ? "OBJETIVO FIJADO: COCHE" : "ESPERANDO COORDENADA...", 16, 24);
+      if (targetLocked) { radarCtx.beginPath(); radarCtx.arc(cx + 24, cy - 15, 5.5, 0, Math.PI*2); radarCtx.fillStyle = "#f43f5e"; radarCtx.fill(); }
+      radarAngle += 0.04; requestAnimationFrame(drawRadar);
+    }
+    drawRadar();
+
+    ["c0","c1","c2","c3","c4"].forEach((id, i, arr) => {
+      document.getElementById(id).addEventListener("input", (e) => {
+        if (e.target.value && i < 4) document.getElementById(arr[i+1]).focus();
+      });
+    });
+
+    function checkDay23() {
+      const word = ["c0","c1","c2","c3","c4"].map(id => document.getElementById(id).value.trim().toUpperCase()).join("");
+      document.getElementById("err-23").classList.remove("show");
+      if (word === "COCHE") {
+        targetLocked = true; document.getElementById("ok-23").classList.add("show"); markDone(23);
+      } else { beep(180, 0.12); document.getElementById("err-23").classList.add("show"); }
+    }
+
+    renderForDate();
+  </script>
+</body>
+</html>
