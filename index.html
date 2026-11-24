@@ -784,76 +784,168 @@
 
     // --- Clean Spy Tension Music & FX ---
     let soundOn = true;
+    let audioPlaying = false;
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let ctx = null, musicMaster = null, musicStarted = false, musicTimer = null, stepIdx = 0;
+    let ctx = null, musicMaster = null, musicFilter = null, musicStarted = false, musicTimer = null, stepIdx = 0;
+    const MUSIC_VOL = 0.65;
+    const MUSIC_DUCK_VOL = 0.08;
+
+    const melody = [220, 0, 329.63, 0, 246.94, 0, 349.23, 329.63, 220, 0, 261.63, 0, 196, 0, 207.65, 0];
+    const bass =   [110, 0, 0,      0, 110,    0, 0,      0,      87.31, 0, 0,    0, 98,  0, 82.41,  0];
+
+    function isAudioRunning() {
+      return !!(ctx && ctx.state === "running");
+    }
+
+    function updateSoundUI() {
+      const btn = document.getElementById("soundToggle");
+      if (!btn) return;
+      const label = btn.querySelector("span");
+      if (!soundOn) {
+        label.textContent = "Audio: OFF";
+        btn.style.borderColor = "";
+        btn.style.color = "";
+      } else if (!isAudioRunning()) {
+        label.textContent = "Activar Audio";
+        btn.style.borderColor = "rgba(56, 189, 248, 0.55)";
+        btn.style.color = "#38bdf8";
+      } else {
+        label.textContent = "Audio: ON";
+        btn.style.borderColor = "";
+        btn.style.color = "";
+      }
+    }
+
+    function unlockSilentBuffer() {
+      if (!ctx) return;
+      try {
+        const buf = ctx.createBuffer(1, 1, 22050);
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+      } catch (e) {}
+    }
 
     function ensureAudioCtx() {
-      if (!ctx) ctx = new AudioCtx();
-      if (ctx.state === "suspended") ctx.resume();
+      if (!AudioCtx) return null;
+      if (navigator.audioSession && navigator.audioSession.type !== "playback") {
+        try { navigator.audioSession.type = "playback"; } catch (e) {}
+      }
+      if (!ctx) {
+        ctx = new AudioCtx();
+        ctx.onstatechange = () => {
+          updateSoundUI();
+          if (soundOn && ctx.state === "running") {
+            if (!musicStarted) startTensionMusic();
+            else if (stepIdx === 0) playMusicStep();
+          }
+        };
+      }
+      if (ctx.state !== "running") {
+        unlockSilentBuffer();
+        ctx.resume().then(() => {
+          updateSoundUI();
+          if (soundOn && ctx.state === "running") {
+            if (!musicStarted) startTensionMusic();
+            else if (stepIdx === 0) playMusicStep();
+          }
+        }).catch(() => {});
+      }
+      return ctx;
+    }
+
+    function playMusicStep() {
+      if (!soundOn || !ctx || ctx.state !== "running" || !musicMaster) return;
+      const now = ctx.currentTime;
+      const idx = stepIdx % melody.length;
+
+      const tick = ctx.createOscillator();
+      const tickG = ctx.createGain();
+      tick.type = "triangle";
+      tick.frequency.setValueAtTime(idx % 4 === 0 ? 1400 : 1050, now);
+      tickG.gain.setValueAtTime(0.055, now);
+      tickG.gain.exponentialRampToValueAtTime(0.0001, now + 0.045);
+      tick.connect(tickG); tickG.connect(musicMaster);
+      tick.start(now); tick.stop(now + 0.05);
+
+      if (bass[idx] > 0) {
+        const bOsc = ctx.createOscillator();
+        const bG = ctx.createGain();
+        bOsc.type = "triangle";
+        bOsc.frequency.setValueAtTime(bass[idx], now);
+        bOsc.frequency.exponentialRampToValueAtTime(bass[idx] * 0.92, now + 0.85);
+        bG.gain.setValueAtTime(0.001, now);
+        bG.gain.linearRampToValueAtTime(0.24, now + 0.035);
+        bG.gain.exponentialRampToValueAtTime(0.0001, now + 1.05);
+        bOsc.connect(bG); bG.connect(musicFilter);
+        bOsc.start(now); bOsc.stop(now + 1.1);
+      }
+
+      if (melody[idx] > 0) {
+        const mOsc = ctx.createOscillator();
+        const mG = ctx.createGain();
+        mOsc.type = "triangle";
+        mOsc.frequency.setValueAtTime(melody[idx], now);
+        mG.gain.setValueAtTime(0.001, now);
+        mG.gain.linearRampToValueAtTime(0.14, now + 0.03);
+        mG.gain.exponentialRampToValueAtTime(0.0001, now + 0.82);
+        mOsc.connect(mG); mG.connect(musicFilter);
+        mOsc.start(now); mOsc.stop(now + 0.86);
+      }
+      stepIdx++;
     }
 
     function startTensionMusic() {
-      if (!soundOn || musicStarted) return;
+      if (!soundOn) return;
       try {
         ensureAudioCtx();
-        musicMaster = ctx.createGain();
-        musicMaster.gain.value = 0.45;
-        musicMaster.connect(ctx.destination);
-        musicStarted = true;
+        if (!ctx) return;
+        if (!musicMaster) {
+          musicMaster = ctx.createGain();
+          musicMaster.gain.value = MUSIC_VOL;
+          musicMaster.connect(ctx.destination);
 
-        const melody = [220, 0, 329.63, 0, 246.94, 0, 349.23, 329.63, 220, 0, 261.63, 0, 196, 0, 207.65, 0];
-        const bass =   [110, 0, 0,      0, 110,    0, 0,      0,      87.31, 0, 0,    0, 98,  0, 82.41,  0];
-
-        musicTimer = setInterval(() => {
-          if (!soundOn || !ctx || ctx.state !== "running") return;
-          const now = ctx.currentTime;
-          const idx = stepIdx % melody.length;
-
-          const tick = ctx.createOscillator();
-          const tickG = ctx.createGain();
-          tick.type = "sine";
-          tick.frequency.setValueAtTime(idx % 4 === 0 ? 1400 : 1050, now);
-          tickG.gain.setValueAtTime(0.012, now);
-          tickG.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
-          tick.connect(tickG); tickG.connect(musicMaster);
-          tick.start(now); tick.stop(now + 0.04);
-
-          if (bass[idx] > 0) {
-            const bOsc = ctx.createOscillator();
-            const bG = ctx.createGain();
-            bOsc.type = "sine";
-            bOsc.frequency.setValueAtTime(bass[idx], now);
-            bOsc.frequency.exponentialRampToValueAtTime(bass[idx] * 0.85, now + 0.9);
-            bG.gain.setValueAtTime(0.001, now);
-            bG.gain.linearRampToValueAtTime(0.1, now + 0.04);
-            bG.gain.exponentialRampToValueAtTime(0.0001, now + 1.1);
-            bOsc.connect(bG); bG.connect(musicMaster);
-            bOsc.start(now); bOsc.stop(now + 1.15);
-          }
-
-          if (melody[idx] > 0) {
-            const mOsc = ctx.createOscillator();
-            const mG = ctx.createGain();
-            mOsc.type = "sine";
-            mOsc.frequency.setValueAtTime(melody[idx], now);
-            mG.gain.setValueAtTime(0.001, now);
-            mG.gain.linearRampToValueAtTime(0.04, now + 0.03);
-            mG.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
-            mOsc.connect(mG); mG.connect(musicMaster);
-            mOsc.start(now); mOsc.stop(now + 0.9);
-          }
-          stepIdx++;
-        }, 480);
+          musicFilter = ctx.createBiquadFilter();
+          musicFilter.type = "lowpass";
+          musicFilter.frequency.value = 1600;
+          musicFilter.Q.value = 0.7;
+          musicFilter.connect(musicMaster);
+        }
+        if (!musicStarted) {
+          musicStarted = true;
+          playMusicStep();
+          musicTimer = setInterval(playMusicStep, 480);
+        } else if (ctx.state === "running") {
+          musicMaster.gain.setTargetAtTime(audioPlaying ? MUSIC_DUCK_VOL : MUSIC_VOL, ctx.currentTime, 0.1);
+        }
+        updateSoundUI();
       } catch(e) {}
     }
 
     function duckMusic(duck) {
-      if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(duck ? 0.06 : 0.45, ctx.currentTime, 0.2);
+      if (musicMaster && ctx) {
+        const target = !soundOn ? 0 : (duck ? MUSIC_DUCK_VOL : MUSIC_VOL);
+        musicMaster.gain.setTargetAtTime(target, ctx.currentTime, 0.2);
+      }
     }
 
-    ["pointerdown", "keydown"].forEach(ev => {
-      window.addEventListener(ev, () => { if (soundOn) startTensionMusic(); }, { once: true });
+    function handleUnlockGesture(e) {
+      if (!soundOn) return;
+      if (e && e.target && e.target.closest && e.target.closest("#soundToggle")) return;
+      if (!isAudioRunning() || !musicStarted) {
+        startTensionMusic();
+      }
+    }
+    ["click", "touchend", "pointerup", "keydown"].forEach(ev => {
+      window.addEventListener(ev, handleUnlockGesture, { passive: true });
     });
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible" && soundOn && ctx && ctx.state !== "running") {
+        ctx.resume().then(() => updateSoundUI()).catch(() => {});
+      }
+    });
+    updateSoundUI();
 
     function beep(freq = 540, dur = 0.07, type = "sine") {
       if (navigator.vibrate) navigator.vibrate(15);
@@ -871,14 +963,15 @@
     }
 
     document.getElementById("soundToggle").onclick = () => {
-      soundOn = !soundOn;
-      document.querySelector("#soundToggle span").textContent = soundOn ? "Audio: ON" : "Audio: OFF";
-      if (soundOn) {
+      if (!soundOn || !isAudioRunning()) {
+        soundOn = true;
         startTensionMusic();
-        if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(0.45, ctx.currentTime, 0.1);
+        if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(audioPlaying ? MUSIC_DUCK_VOL : MUSIC_VOL, ctx.currentTime, 0.08);
       } else {
-        if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
+        soundOn = false;
+        if (musicMaster && ctx) musicMaster.gain.setTargetAtTime(0, ctx.currentTime, 0.08);
       }
+      updateSoundUI();
     };
 
     // --- Date & Visibility ---
@@ -1181,7 +1274,6 @@
     // --- DÍA 10: Neural MP3 Voice + Keypad ---
     const specCanvas = document.getElementById("specCanvas");
     const specCtx = specCanvas.getContext("2d");
-    let audioPlaying = false;
     function drawSpectrum() {
       const w = specCanvas.width, h = specCanvas.height;
       specCtx.fillStyle = "#04070e"; specCtx.fillRect(0, 0, w, h);
